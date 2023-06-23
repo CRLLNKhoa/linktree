@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { data } from "autoprefixer";
 import Link from "next/link";
+import MyHead from "@/components/MyHead";
 
 const Apply = () => {
   const router = useRouter();
@@ -53,6 +54,12 @@ const Apply = () => {
 
   return (
     <>
+    <MyHead
+        title="Đăng ký"
+        description="Đăng ký tạo linktree của bản thân"
+        image="https://www.gosite.com/hubfs/GoSite_LinkTreeExamples.png"
+        url="https://linktree-crllnkhoa.vercel.app/"
+      />
       <section className="">
         <div
           className={

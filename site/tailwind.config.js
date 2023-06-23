@@ -6,7 +6,12 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      cursor: {
+        default: "url(/svg/shoot.svg) 15 15,default",
+        shooted: "url(/svg/shooted.svg)15 15 ,default",
+      },
+    },
   },
   plugins: [require("daisyui")],
 }

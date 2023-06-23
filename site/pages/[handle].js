@@ -1,4 +1,6 @@
+import Games from "@/components/Games";
 import LinkTree from "@/components/LinkTree";
+import MyHead from "@/components/MyHead";
 import SocicalMedia from "@/components/SocicalMedia";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -57,15 +59,18 @@ export default function Handle() {
   }, [router.query]);
   return (
   <>
-  <Head>
-    <title>{data?.name}</title>
-  </Head>
+    <MyHead
+        title={`${data?.name}, xin chào bạn!`}
+        description={data?.bio}
+        image={data?.avatar}
+        url="https://linktree-crllnkhoa.vercel.app/"
+      />
       <div className="w-full min-h-screen bg-no-repeat bg-cover bg-[url('https://img.rawpixel.com/private/static/images/website/2022-05/rm218-ning-01.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=0614edfc39bea7c3fcf75ec8d3e4ab81')] flex justify-center items-center pt-10">
         {foundMain ? <LinkTree data={data} /> : <div className="flex flex-col justify-center items-center"><progress className="progress w-56"></progress>
         <p>Đang tải thông tin!</p></div>}
         {found && <button
           onClick={() => setIsShow(!isShow)}
-          className="fixed bottom-4 right-4 border-2 shadow-md p-2 rounded-full z-50 cursor-pointer bg-white"
+          className="fixed bottom-4 right-4 border-2 shadow-md p-2 rounded-full z-40 cursor-pointer bg-white"
         >
           <img className="w-12 h-12" src="/svg/menu.svg" />
         </button>}
