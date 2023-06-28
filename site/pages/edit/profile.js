@@ -1,6 +1,7 @@
 import UserHeader from "@/components/UserHeader";
 import UserContext from "@/context/userContext";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -159,9 +160,14 @@ export default function Profile() {
                   />
                   <img className="w-12 rounded-full" src={avatar || "/svg/user.svg"} alt="" />
                 </div>
-                <button onClick={saveProfile} className="bg-green-600 ml-auto px-4 py-1 rounded-lg text-white hover:bg-green-800 duration-500">
-                  Lưu thông tin
-                </button>
+                <div className="w-full flex justify-between  flex-wrap">
+                <Link target="_blank" href="https://upload-getlink.vercel.app/home" onClick={saveProfile} className="bg-sky-600 ml-auto px-4 py-1 rounded-lg text-white hover:bg-sky-800 duration-500">
+                    Tạo liên kết ảnh tại đây
+                  </Link>
+                  <button onClick={saveProfile} className="bg-green-600 ml-auto px-4 py-1 rounded-lg text-white hover:bg-green-800 duration-500">
+                    Lưu thông tin
+                  </button>
+                </div>  
               </div>
 
               <h1 className="font-bold mt-12">Liên kết mạng xã hội</h1>

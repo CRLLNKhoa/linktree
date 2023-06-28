@@ -2,7 +2,9 @@ import MyHead from "@/components/MyHead";
 import UserHeader from "@/components/UserHeader";
 import Card from "@/components/editThemeComponents/Card";
 import SocialList from "@/components/editThemeComponents/SocialList";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Theme() {
   const [background, setBackground] = useState("bg-yellow-400");
@@ -10,8 +12,78 @@ export default function Theme() {
   const [cardColor, setCardColor] = useState("bg-white");
   const [typeCard, setTypeCard] = useState(1);
   const [typeMedia, setTypeMedia] = useState(1);
-  const [isShow, setIsShow] = useState(false);
+  const [isShow, setIsShow] = useState(true);
+  const [even, setEven] = useState(false);
+  const router = useRouter();
 
+  const saveTheme = () => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/save/theme`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        tokenMail: localStorage.getItem("LinkTreeToken"),
+        theme: {
+          background: background,
+          colorText: colorText,
+          colorCard: cardColor,
+          typeCard: typeCard,
+          positionSocial: typeMedia,
+          even:  even
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 400) {
+          return toast.error("Lỗi xảy ra khi lưu thông tin!");
+        }
+        toast.success("Cập nhật thành công!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
+  useEffect(() => {
+    if (!localStorage.getItem("LinkTreeToken")) return router.push("/login");
+
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/load/theme`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        tokenMail: localStorage.getItem("LinkTreeToken"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 400) {
+          return toast.error("Kết nối server thất bại!");
+        }
+        const { background, colorText, colorCard, typeCard, positionSocial,even } =   data.data;
+        setBackground(background)
+        setCardColor(colorCard)
+        setColorText(colorText) 
+        setTypeCard(typeCard)
+        setTypeMedia(positionSocial)
+        setEven(even)
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, []);
   return (
     <>
       <MyHead
@@ -30,21 +102,21 @@ export default function Theme() {
             className={`${background} relative flex-1 lg:basis-2/5 min-h-[90vh] border-2 shadow-sm rounded-lg flex flex-col items-center justify-start py-8 bg-no-repeat bg-cover`}
           >
             <div className="flex flex-col justify-center items-center">
-                <img className="w-24 h-24 rounded-full" src="/svg/ava.svg" />
-                <b className={`${colorText} flex gap-2 items-center`}>
-                  Nguyễn Văn A{" "}
-                  <img className="w-4 h-4" src="/svg/tichxanh.svg" alt="" />
-                </b>
-                <p className={`text-[13px] ${colorText}`}>
-                  Xin chào đây là bio của tôi!
-                </p>
+              <img className="w-24 h-24 rounded-full" src="/svg/ava.svg" />
+              <b className={`${colorText} flex gap-2 items-center`}>
+                Nguyễn Văn A{" "}
+                <img className="w-4 h-4" src="/svg/tichxanh.svg" alt="" />
+              </b>
+              <p className={`text-[13px] ${colorText}`}>
+                Xin chào đây là bio của tôi!
+              </p>
             </div>
             <div className="mt-8 flex w-full justify-center items-center gap-4 flex-col pb-16">
-              <Card color={cardColor} type={typeCard} />
-              <Card even color={cardColor} type={typeCard} />
-              <Card color={cardColor} type={typeCard} />
-              <Card even color={cardColor} type={typeCard} />
-              <Card color={cardColor} type={typeCard} />
+              <Card even={even} index={2} color={cardColor} type={typeCard} />
+              <Card even={even} index={3}  color={cardColor} type={typeCard} />
+              <Card even={even} index={4} color={cardColor} type={typeCard} />
+              <Card even={even} index={5}  color={cardColor} type={typeCard} />
+              <Card even={even} index={6} color={cardColor} type={typeCard} />
             </div>
             {typeMedia === 1 ? (
               <div className="">
@@ -60,33 +132,37 @@ export default function Theme() {
             )}
 
             {/* NOTE  MENU */}
-            {typeMedia ===   2 && <div
-              className={`${
-                isShow ? "-z-50 opacity-0" : "z-40 opacity-1"
-              } absolute top-0 bottom-0 left-0 right-0 transition-all duration-500`}
-            >
-              {/* Over play */}
+            {typeMedia === 2 && (
               <div
-                onClick={() => setIsShow(!isShow)}
-                className=" cursor-pointer absolute top-0 bottom-0 left-0 right-0 bg-slate-900 opacity-60"
-              ></div>
-              <div
-                className={`absolute ${
-                  !isShow ? "bottom-20 opacity-100" : "bottom-[100%] opacity-0"
-                } right-[26px] transition-all duration-500 flex flex-col gap-4`}
+                className={`${
+                  isShow ? "-z-50 opacity-0" : "z-40 opacity-1"
+                } absolute top-0 bottom-0 left-0 right-0 transition-all duration-500`}
               >
-                <SocialList />
+                {/* Over play */}
+                <div
+                  onClick={() => setIsShow(!isShow)}
+                  className=" cursor-pointer absolute top-0 bottom-0 left-0 right-0 bg-slate-900 opacity-60"
+                ></div>
+                <div
+                  className={`absolute ${
+                    !isShow
+                      ? "bottom-20 opacity-100"
+                      : "bottom-[100%] opacity-0"
+                  } right-[26px] transition-all duration-500 flex flex-col gap-4`}
+                >
+                  <SocialList />
+                </div>
+                <div
+                  className={`absolute ${
+                    !isShow ? "right-20 opacity-100" : "right-[100%] opacity-0"
+                  } bottom-6 transition-all duration-500 flex gap-4`}
+                >
+                  <button className="bg-white p-2 rounded-full">
+                    <img className="w-5 h-5" src="/svg/share.svg" alt="" />
+                  </button>
+                </div>
               </div>
-              <div
-                className={`absolute ${
-                  !isShow ? "right-20 opacity-100" : "right-[100%] opacity-0"
-                } bottom-6 transition-all duration-500 flex gap-4`}
-              >
-                <button className="bg-white p-2 rounded-full">
-                  <img className="w-5 h-5" src="/svg/share.svg" alt="" />
-                </button>
-              </div>
-            </div>}
+            )}
           </section>
           <section className="flex-1 lg:basis-3/5 lg:px-8 mt-8">
             <b>Tùy chỉnh giao diện:</b>
@@ -394,6 +470,39 @@ export default function Theme() {
               </div>
             </div>
 
+                 {/* NOTE Card Type */}
+                 <div className="flex gap-8 mt-8 items-center">
+              <b>Vị trí nội dung thẻ:</b>
+              <div className="flex gap-8">
+                <label
+                  className="cursor-pointer flex gap-2 p-2 rounded-full"
+                  htmlFor="asdsad"
+                >
+                  <input
+                    id="asdsad"
+                    checked={even === false}
+                    name="sssss"
+                    type="radio"
+                    onChange={() => setEven(false)}
+                  />
+                  Option 1
+                </label>
+                <label
+                  className="cursor-pointer flex gap-2 p-2 rounded-lg"
+                  htmlFor="asdasdaa"
+                >
+                  <input
+                    id="asdasdaa"
+                    checked={even === true}
+                    name="sssss"
+                    type="radio"
+                    onChange={() => setEven(true)}
+                  />
+                  Option 2 
+                </label>
+              </div>
+            </div>
+
             {/* NOTE Type Social */}
             <div className="flex gap-8 mt-8 items-center">
               <b>Vị trí các liên kết:</b>
@@ -420,7 +529,15 @@ export default function Theme() {
                 </label>
               </div>
             </div>
-          <div className="w-full flex items-end mt-8"><button className="bg-sky-600 hover:bg-sky-800 duration-500 py-1 px-8 rounded-lg text-white font-semibold ml-auto"> Lưu cập nhât</button></div>
+            <div className="w-full flex items-end mt-8">
+              <button
+                onClick={saveTheme}
+                className="bg-sky-600 hover:bg-sky-800 duration-500 py-1 px-8 rounded-lg text-white font-semibold ml-auto"
+              >
+                {" "}
+                Lưu cập nhât
+              </button>
+            </div>
           </section>
         </main>
       </div>

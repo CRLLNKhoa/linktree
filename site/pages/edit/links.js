@@ -51,8 +51,8 @@ export default function Links() {
           return toast.error("Lỗi xảy ra khi lưu thông tin!");
         }
         toast.success("Cập nhật thành công!", {
-          position: "bottom-right",
-          autoClose: 5000,
+          position: "bottom-left",
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

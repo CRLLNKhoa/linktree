@@ -77,6 +77,15 @@ export default function UserHeader({ data }) {
               <p>Chỉnh sửa thông tin</p>
             </Link>
           </div>
+
+          <div className="flex">
+            <Link
+              className="border border-sky-600 bg-sky-600 px-4 py-2 text-[13px] flex gap-2 items-center rounded-lg bg-white-800 text-white"
+              href={`/edit/theme`}
+            >
+              <p>Tùy chỉnh giao diện hiển thị</p>
+            </Link>
+          </div>
   
           <div className="flex">
             <Link

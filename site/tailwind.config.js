@@ -11,6 +11,9 @@ module.exports = {
         default: "url(/svg/shoot.svg) 15 15,default",
         shooted: "url(/svg/shooted.svg)15 15 ,default",
       },
+      animation: {
+        'spin-slow': 'spin 10s linear infinite',
+      }
     },
   },
   plugins: [require("daisyui")],
