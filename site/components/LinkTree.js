@@ -60,7 +60,7 @@ export default function LinkTree({ data, noLoad }) {
             {bio}
           </p>
         )}
-        <div className="bg-white justify-between rounded-lg w-full mt-4 flex items-center  py-2 px-4">
+        <div className="bg-white justify-between rounded-lg w-full mt-4 hidden lg:flex items-center  py-2 px-4">
           <img
             className={`w-24 ${
               statusMusic && "animate-spin-slow"
